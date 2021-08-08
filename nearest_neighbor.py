@@ -12,6 +12,19 @@ import pandas as pd
 from sklearn import metrics
 
 
+accuracy_table = pd.DataFrame(
+        {
+            "k": [],
+            "tp": [],
+            "fp": [],
+            "tn": [],
+            "fn": [],
+            "accuracy": [],
+            "tpr": [],
+            "tnr": [],
+        }
+    )
+
 def knn(df, k):
 
     # Separating into x and y
