@@ -93,5 +93,59 @@ def main():
     print(accuracy_by_k_table)
     print("\n==========================================================")
 
+    # Now to create a new label called 'Adult'.
+    # If the number of rings is 10 of greater, we will set
+    # 'Adult' to T from True. If the number of rings is
+    # less than 10, we will set F for False.
+    # Adding Color column based on class
+    def color_label(row):
+        if row["Rings"] > 10:
+            return "T"
+        else:
+            return "F"
+
+    df["Adult"] = df.apply(lambda row: color_label(row), axis=1)
+    
+    # Separating into x and y
+    y = df["Adult"].values.tolist()
+    x = df.drop(["Adult", "Sex"], axis=1)
+
+    # Splitting 50:50
+    x_train, x_test, y_train, y_test = train_test_split(
+        x, y, test_size=0.5, random_state=1, shuffle=True
+    )
+
+    NB_classifier = MultinomialNB().fit(x_train, y_train)
+    y_predict = NB_classifier.predict(x_test)
+
+    accuracy = metrics.accuracy_score(y_test, y_predict)
+
+    print("Confusion Matrix:")
+    print(confusion_matrix(y_test, y_predict))
+
+    print("\nAccuracy: " + str(round((accuracy * 100), 2)) + "%")
+
+    acc_nb = accuracy
+    index = 0
+    tp_nb = 0
+    fp_nb = 0
+    tn_nb = 0
+    fn_nb = 0
+    y_test = y_test
+    
+    for item in y_predict:
+        if item == "N":
+            if item == y_test[index]:
+                tp_nb += 1
+            else:
+                fp_nb += 1
+        else:
+            if item == y_test[index]:
+                tn_nb += 1
+            else:
+                fn_nb += 1
+        index += 1
+    tpr_nb = tp_nb / (tp_nb + fn_nb)
+    tnr_nb = tn_nb / (tn_nb + fp_nb)
 
 main()
