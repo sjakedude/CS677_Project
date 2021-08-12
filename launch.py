@@ -6,6 +6,7 @@ Project
 Analyzing abalone data to find the best classifier to predict the number of rings.
 """
 
+from predict_rings import quadradic
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -19,7 +20,7 @@ from sklearn import tree
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 import sys
-from linear_regression import linear_regression
+from predict_rings import linear_regression, quadradic, cubic
 from nearest_neighbor import knn
 
 
@@ -42,6 +43,10 @@ df = pd.read_csv(
 
 def main():
 
+    # =============================================
+    # Predicting: # of Rings
+    # =============================================
+
     # Using linear regression to find the best
     # column to predict the correct number of rings
     best_column = None
@@ -63,7 +68,55 @@ def main():
         {k: v for k, v in sorted(errors_by_column.items(), key=lambda item: item[1])}
     )
     print(errors_table)
-    print("\n==========================================================")
+
+    # Using quadratic to find the best column 
+    # to predict the correct number of rings
+    best_column = None
+    lowest_sse = sys.float_info.max
+    errors_by_column = {}
+    for c in df.columns:
+        if c not in ["Rings", "Sex"]:
+            sse = quadradic(df, c)
+            errors_by_column[c] = [sse]
+            if sse < lowest_sse:
+                lowest_sse = sse
+                best_column = c
+    print("==========================================================")
+    print("For predicting the number of rings using Quatradic Method")
+    print("==========================================================")
+    print("Best Column: " + best_column)
+    print("\nTable: (Sorted by best to worst from left to right)\n")
+    errors_table = pd.DataFrame(
+        {k: v for k, v in sorted(errors_by_column.items(), key=lambda item: item[1])}
+    )
+    print(errors_table)
+
+    # Using cubic to find the best column 
+    # to predict the correct number of rings
+    best_column = None
+    lowest_sse = sys.float_info.max
+    errors_by_column = {}
+    for c in df.columns:
+        if c not in ["Rings", "Sex"]:
+            sse = cubic(df, c)
+            errors_by_column[c] = [sse]
+            if sse < lowest_sse:
+                lowest_sse = sse
+                best_column = c
+    print("==========================================================")
+    print("For predicting the number of rings using Cubic Method")
+    print("==========================================================")
+    print("Best Column: " + best_column)
+    print("\nTable: (Sorted by best to worst from left to right)\n")
+    errors_table = pd.DataFrame(
+        {k: v for k, v in sorted(errors_by_column.items(), key=lambda item: item[1])}
+    )
+    print(errors_table)
+    print("\n==========================================================")    
+
+    # =============================================
+    # Predicting: # of Rings
+    # =============================================
 
     # Using Nearest Neighbor to find the best
     # column to predict the correct Sex
@@ -93,6 +146,10 @@ def main():
     print(accuracy_by_k_table)
     print("\n==========================================================")
 
+    # =============================================
+    # Predicting: # of Rings
+    # =============================================
+
     # Now to create a new label called 'Adult'.
     # If the number of rings is 10 of greater, we will set
     # 'Adult' to T from True. If the number of rings is
@@ -105,7 +162,7 @@ def main():
             return "F"
 
     df["Adult"] = df.apply(lambda row: color_label(row), axis=1)
-    
+
     # Separating into x and y
     y = df["Adult"].values.tolist()
     x = df.drop(["Adult", "Sex"], axis=1)
@@ -132,7 +189,7 @@ def main():
     tn_nb = 0
     fn_nb = 0
     y_test = y_test
-    
+
     for item in y_predict:
         if item == "N":
             if item == y_test[index]:
@@ -147,5 +204,6 @@ def main():
         index += 1
     tpr_nb = tp_nb / (tp_nb + fn_nb)
     tnr_nb = tn_nb / (tn_nb + fp_nb)
+
 
 main()
