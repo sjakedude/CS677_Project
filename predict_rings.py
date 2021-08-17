@@ -41,7 +41,7 @@ def linear_regression(df, column):
     plt.title("Linear Regression for predicting # of Rings")
     plt.xlabel(column)
     plt.ylabel("Rings")
-    #plt.show()
+    plt.show()
 
     # Calculate sum of residuals squared
     sum_of_errors_squared = ((y_test - predicted) * (y_test - predicted)).sum()
@@ -70,7 +70,7 @@ def quadradic(df, column):
     plt.title("Quadradic for Predicting # of Rings")
     plt.xlabel(column)
     plt.ylabel("Rings")
-    #plt.show()
+    plt.show()
 
     sum_of_errors_squared = ((y_test - predicted) * (y_test - predicted)).sum()
 
@@ -97,7 +97,7 @@ def cubic(df, column):
     plt.title("Cubic for Predicting # of Rings")
     plt.xlabel(column)
     plt.ylabel("Rings")
-    #plt.show()
+    plt.show()
 
     sum_of_errors_squared = ((y_test - predicted) * (y_test - predicted)).sum()
 
