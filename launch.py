@@ -63,7 +63,7 @@ def main():
     print("For predicting the number of rings using Linear Regression")
     print("==========================================================")
     print("Best Column: " + best_column)
-    print("\nTable: (Sorted by best to worst from left to right)\n")
+    print("\nTable of SSE: (Sorted by best to worst from left to right)\n")
     errors_table = pd.DataFrame(
         {k: v for k, v in sorted(errors_by_column.items(), key=lambda item: item[1])}
     )
@@ -85,7 +85,7 @@ def main():
     print("For predicting the number of rings using Quatradic Method")
     print("==========================================================")
     print("Best Column: " + best_column)
-    print("\nTable: (Sorted by best to worst from left to right)\n")
+    print("\nTable of SSE: (Sorted by best to worst from left to right)\n")
     errors_table = pd.DataFrame(
         {k: v for k, v in sorted(errors_by_column.items(), key=lambda item: item[1])}
     )
@@ -107,47 +107,15 @@ def main():
     print("For predicting the number of rings using Cubic Method")
     print("==========================================================")
     print("Best Column: " + best_column)
-    print("\nTable: (Sorted by best to worst from left to right)\n")
+    print("\nTable of SSE: (Sorted by best to worst from left to right)\n")
     errors_table = pd.DataFrame(
         {k: v for k, v in sorted(errors_by_column.items(), key=lambda item: item[1])}
     )
     print(errors_table)
-    print("\n==========================================================")    
+    print("\n\n")
 
     # =============================================
-    # Predicting: # of Rings
-    # =============================================
-
-    # Using Nearest Neighbor to find the best
-    # column to predict the correct Sex
-    neighbors = [3, 5, 7, 9, 11, 13]
-    best_column = None
-    best_accuracy = 0
-    accuracy_by_k = {}
-    for k in neighbors:
-        accuracy = knn(df, k)
-        accuracy_by_k[k] = [accuracy]
-        if accuracy > best_accuracy:
-            best_accuracy = accuracy
-            best_column = c
-    print("==========================================================")
-    print("For predicting the Sex using Nearest Neighbor")
-    print("==========================================================")
-    print("Best Column: " + best_column)
-    print("\nTable: (Sorted by best to worst from left to right)\n")
-    accuracy_by_k_table = pd.DataFrame(
-        {
-            k: v
-            for k, v in sorted(
-                accuracy_by_k.items(), key=lambda item: item[1], reverse=True
-            )
-        }
-    )
-    print(accuracy_by_k_table)
-    print("\n==========================================================")
-
-    # =============================================
-    # Predicting: # of Rings
+    # Predicting: Adult vs Child
     # =============================================
 
     # Now to create a new label called 'Adult'.
@@ -165,45 +133,35 @@ def main():
 
     # Separating into x and y
     y = df["Adult"].values.tolist()
-    x = df.drop(["Adult", "Sex"], axis=1)
 
-    # Splitting 50:50
-    x_train, x_test, y_train, y_test = train_test_split(
-        x, y, test_size=0.5, random_state=1, shuffle=True
+    x = df.drop(["Adult", "Rings", "Sex"], axis=1)
+
+    # Using Nearest Neighbor to find the best
+    # column to predict the correct Sex
+    neighbors = [3, 5, 7, 9, 11, 13]
+    best_column = None
+    best_accuracy = 0
+    accuracy_by_k = {}
+    for k in neighbors:
+        accuracy = knn(x, y, k)
+        accuracy_by_k[k] = [accuracy]
+        if accuracy > best_accuracy:
+            best_accuracy = accuracy
+            best_column = c
+    print("==========================================================")
+    print("For predicting Adult vs Child using Nearest Neighbor")
+    print("==========================================================")
+    print("Best Column: " + best_column)
+    print("\nTable: (Sorted by best to worst from left to right)\n")
+    accuracy_by_k_table = pd.DataFrame(
+        {
+            k: v
+            for k, v in sorted(
+                accuracy_by_k.items(), key=lambda item: item[1], reverse=True
+            )
+        }
     )
-
-    NB_classifier = MultinomialNB().fit(x_train, y_train)
-    y_predict = NB_classifier.predict(x_test)
-
-    accuracy = metrics.accuracy_score(y_test, y_predict)
-
-    print("Confusion Matrix:")
-    print(confusion_matrix(y_test, y_predict))
-
-    print("\nAccuracy: " + str(round((accuracy * 100), 2)) + "%")
-
-    acc_nb = accuracy
-    index = 0
-    tp_nb = 0
-    fp_nb = 0
-    tn_nb = 0
-    fn_nb = 0
-    y_test = y_test
-
-    for item in y_predict:
-        if item == "N":
-            if item == y_test[index]:
-                tp_nb += 1
-            else:
-                fp_nb += 1
-        else:
-            if item == y_test[index]:
-                tn_nb += 1
-            else:
-                fn_nb += 1
-        index += 1
-    tpr_nb = tp_nb / (tp_nb + fn_nb)
-    tnr_nb = tn_nb / (tn_nb + fp_nb)
-
+    print(accuracy_by_k_table)
+    print("\n==========================================================")
 
 main()

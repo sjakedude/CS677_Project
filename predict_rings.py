@@ -37,10 +37,11 @@ def linear_regression(df, column):
     model = np.poly1d(weights)
     predicted = model(x_test)
 
-    # plt.plot(x_test, y_test, "s", x_test, predicted, "s")
-    # plt.title("Linear Regression for predicting # of Rings")
-    # plt.legend(loc="upper right")
-    # plt.show()
+    plt.plot(x_test, y_test, "s", x_test, predicted, "s")
+    plt.title("Linear Regression for predicting # of Rings")
+    plt.xlabel(column)
+    plt.ylabel("Rings")
+    #plt.show()
 
     # Calculate sum of residuals squared
     sum_of_errors_squared = ((y_test - predicted) * (y_test - predicted)).sum()
@@ -65,9 +66,10 @@ def quadradic(df, column):
     model = np.poly1d(weights)
     predicted = model(x_test)
 
-    # plt.plot(x_test, y_test, "s", x_test, predicted, "s")
-    # plt.title("Quadradic for Predicting # of Rings")
-    # plt.legend(loc="upper right")
+    plt.plot(x_test, y_test, "s", x_test, predicted, "s")
+    plt.title("Quadradic for Predicting # of Rings")
+    plt.xlabel(column)
+    plt.ylabel("Rings")
     #plt.show()
 
     sum_of_errors_squared = ((y_test - predicted) * (y_test - predicted)).sum()
@@ -93,8 +95,9 @@ def cubic(df, column):
 
     plt.plot(x_test, y_test, "s", x_test, predicted, "s")
     plt.title("Cubic for Predicting # of Rings")
-    plt.legend(loc="upper right")
-    plt.show()
+    plt.xlabel(column)
+    plt.ylabel("Rings")
+    #plt.show()
 
     sum_of_errors_squared = ((y_test - predicted) * (y_test - predicted)).sum()
 

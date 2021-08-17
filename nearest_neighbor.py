@@ -25,13 +25,8 @@ accuracy_table = pd.DataFrame(
         }
     )
 
-def knn(df, k):
-
-    # Separating into x and y
-    y = df["Sex"]
-    x = df.drop(["Sex"], axis=1)
+def knn(x, y, k):
     
-
     # Splitting 50:50
     x_train, x_test, y_train, y_test = train_test_split(
         x, y, test_size=0.5, random_state=1, shuffle=True
@@ -43,8 +38,6 @@ def knn(df, k):
     y_pred = knn.predict(x_test)
     accuracy = metrics.accuracy_score(y_pred, y_test)
 
-    y_test = y_test.values.tolist()
-
     index = 0
     tp = 0
     fp = 0
@@ -52,7 +45,7 @@ def knn(df, k):
     fn = 0
 
     for item in y_pred:
-        if item == "M":
+        if item == "T":
             if item == y_test[index]:
                 tp += 1
             else:
