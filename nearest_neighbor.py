@@ -36,7 +36,7 @@ def knn(x, y, k):
     knn = KNeighborsClassifier(n_neighbors=k)
     knn.fit(x_train, y_train)
     y_pred = knn.predict(x_test)
-    accuracy = metrics.accuracy_score(y_pred, y_test)
+    accuracy = round((metrics.accuracy_score(y_pred, y_test) * 100), 2)
 
     index = 0
     tp = 0
@@ -61,6 +61,7 @@ def knn(x, y, k):
 
     accuracy_table = pd.DataFrame(
         {
+            "k": [k],
             "tp": [tp],
             "fp": fp,
             "tn": [tn],
@@ -70,6 +71,6 @@ def knn(x, y, k):
             "tnr": [tnr],
         }
     )
-
+    print("\n")
     print(accuracy_table)
     return accuracy

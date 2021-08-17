@@ -139,19 +139,13 @@ def main():
     # Using Nearest Neighbor to find the best
     # column to predict the correct Sex
     neighbors = [3, 5, 7, 9, 11, 13]
-    best_column = None
-    best_accuracy = 0
     accuracy_by_k = {}
     for k in neighbors:
         accuracy = knn(x, y, k)
         accuracy_by_k[k] = [accuracy]
-        if accuracy > best_accuracy:
-            best_accuracy = accuracy
-            best_column = c
     print("==========================================================")
     print("For predicting Adult vs Child using Nearest Neighbor")
     print("==========================================================")
-    print("Best Column: " + best_column)
     print("\nTable: (Sorted by best to worst from left to right)\n")
     accuracy_by_k_table = pd.DataFrame(
         {
